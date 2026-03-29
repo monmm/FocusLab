@@ -10,7 +10,8 @@ La `MainActivity` gestiona el flujo de productividad basado en el método Pomodo
 El diseño se basa en **Material Components** y las mejores prácticas de diseño de Android:
 * **Jerarquía Visual:** Uso de `ConstraintLayout` para una disposición eficiente de `ImageViews`, `TextViews` y `MaterialButtons`.
 * **Feedback de Estado:** El `Chip` del modo activo se resalta visualmente mediante un borde (*stroke*), facilitando la identificación del estado actual del ciclo mediante `ChipGroups`.
-* **Recursos y Activos:** * Soporte multilingüe completo mediante archivos `values-es/strings.xml`.
+* **Recursos y Activos:**
+    * Soporte multilingüe completo mediante archivos `values-es/strings.xml`.
     * Identidad visual gestionada a través de `Image Assets` para el logo de la aplicación.
 * **Herramientas de Diseño:** Uso de atributos `tools` en el XML para previsualizar estados sin afectar el tiempo de ejecución.
 
@@ -27,7 +28,7 @@ La aplicación utiliza el patrón **Modelo-Vista-Controlador** para desacoplar l
     * **Gestión de "Estado Vacío":** Interfaz dinámica que muestra una vista alternativa cuando el historial no contiene registros.
 
 ### 4. Resumen de Componentes Técnicos
-* **Almacenamiento:** Mientras que en la rama `master` el historial de sesiones es gestionado de forma local y volátil en memoria RAM, la rama `sqlite-persistence` escala el proyecto integrando una capa de persistencia definitiva mediante **SQLite nativo**, garantizando la integridad del historial de productividad del usuario a largo plazo.
+* **Almacenamiento:** Mientras que en la rama `master` el historial de sesiones es gestionado de forma local y volátil en memoria RAM, la rama [`sqlite-persistence`](https://github.com/monmm/FocusLab/blob/feature/sqlite-persistence/README.md) escala el proyecto integrando una capa de persistencia definitiva mediante **SQLite nativo**, garantizando la integridad del historial de productividad del usuario a largo plazo.
 * **Arquitectura:** MVC con separación clara de responsabilidades.
 * **Configuración:** `SharedPreferences` para persistir preferencias de usuario (Tema e Idioma).
 
