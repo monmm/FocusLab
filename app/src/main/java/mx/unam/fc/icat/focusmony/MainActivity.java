@@ -30,6 +30,12 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import mx.unam.fc.icat.focusmony.model.Session;
+import mx.unam.fc.icat.focusmony.model.SessionManager;
 import mx.unam.fc.icat.focusmony.view.PreferencesActivity;
 import mx.unam.fc.icat.focusmony.view.SessionHistoryActivity;
 
@@ -38,7 +44,7 @@ import mx.unam.fc.icat.focusmony.view.SessionHistoryActivity;
  * Esta clase coordina la interfaz de usuario, los estados de la sesión y la
  * lógica de temporización utilizando CountDownTimer.
  * @author <a href="mailto:monmm@ciencias.unam.mx" > Mónica Miranda Mijangos </a> - @monmm
- * @version 1.2, mar 2026 (esqueleto para alumnos)
+ * @version 1.3, mar 2026 (esqueleto para alumnos)
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     enum SessionMode { FOCUS, BREAK, REST}
 
     // Constantes de configuración.
-    private static final long FOCUS_DURATION_MS   = 25 * 60 * 1000L;
+    private static final long FOCUS_DURATION_MS   = 1 * 60 * 1000L;
     private static final long BREAK_DURATION_MS   =  5 * 60 * 1000L;
     private static final long REST_DURATION_MS    = 15 * 60 * 1000L;
     private static final int SESSIONS_BEFORE_REST = 4;
@@ -75,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
     private long timeLeftMillis = FOCUS_DURATION_MS;
     private int focusSessionsCompleted = 0;
 
+    // Elementos para el registro de una sesión.
+    private Session newSession;
+    SessionManager sessionManager;
+    private boolean currentSessionIsCompleted = true;
+
     /**
      * TODO: Documentar.
      * @param savedInstanceState ...
@@ -88,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Inicializamos los elementos de la IU.
         bindViews();
+        // Llamamos al controlador.
+        sessionManager = new SessionManager(this);
         // Habilitamos nuestra barra de herramientas.
         setSupportActionBar(toolbar);
         // Asignamos los escuchas.
@@ -194,6 +207,22 @@ public class MainActivity extends AppCompatActivity {
         // PRUEBA
         // addDot();
 
+        // Registramos una nueva sesión.
+        newSession = new Session();
+        if (currentMode == SessionMode.FOCUS) {
+            newSession.setType(getString(R.string.mode_focus));
+            newSession.setDuration(25);
+        } else if (currentMode == SessionMode.BREAK) {
+            newSession.setType(getString(R.string.mode_break));
+            newSession.setDuration(5);
+        } else {
+            newSession.setType(getString(R.string.mode_long_break));
+            newSession.setDuration(15);
+        }
+
+        newSession.setDate(new SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(new Date()));
+        newSession.setStartTime(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));;
+
         // Creamos e inicializamos un contador.
         countDownTimer = new CountDownTimer(timeLeftMillis, 1000) {
             @Override
@@ -245,8 +274,13 @@ public class MainActivity extends AppCompatActivity {
             currentMode = SessionMode.FOCUS;
         }
 
+        // TODO: Verificar los casos en que la sesión puede marcarse como incompleta.
+        currentSessionIsCompleted = true;
+        newSession.setCompleted(currentSessionIsCompleted);
+        sessionManager.saveSession(newSession);
+
         // Mostramos un mensaje sencillo al finalizar cada sesion.
-        Toast.makeText(this, "¡Sesión terminada!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Sesión guardada en el historial.", Toast.LENGTH_SHORT).show();
 
         // Solicitamos al servicio del sistema que genere una vibracion simple
         // para notificar al usuario que la sesion a terminado.
@@ -315,6 +349,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void resetTimer() {
         // TODO: Implementar el reinicio manual de la sesión actual.
+        // TODO: ¿Qué sucede con el registro de la sesión?
     }
 
     /**

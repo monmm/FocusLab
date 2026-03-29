@@ -20,7 +20,7 @@ import mx.unam.fc.icat.focusmony.model.SessionManager;
  * Actividad que visualiza el historial cronológico de las sesiones de enfoque y descanso.
  * Se utiliza como práctica para el manejo de RecyclerView, adaptadores y filtrado de datos.
  * @author <a href="mailto:monmm@ciencias.unam.mx" > Mónica Miranda Mijangos </a> - @monmm
- * @version 1.2, mar 2026 (esqueleto para alumnos)
+ * @version 1.3, mar 2026 (esqueleto para alumnos)
  */
 public class SessionHistoryActivity extends AppCompatActivity {
 
@@ -59,14 +59,7 @@ public class SessionHistoryActivity extends AppCompatActivity {
 
         // TODO: Vincular Chips mediante findViewById y asignar IDs correspondientes.
 
-        sessionManager = new SessionManager();
-        // Puedes descomentar estas líneas para probar el diseño:
-        /*
-        sessionManager.addSession(new Session("Enfoque", "18 mar 2026", "15:00", 25, true));
-        sessionManager.addSession(new Session("Descanso", "18 mar 2026", "15:25", 5, true));
-        sessionManager.addSession(new Session("Enfoque", "18 mar 2026", "17:25", 3, false));
-        sessionManager.addSession(new Session("Descanso", "18 mar 2026", "18:30", 15, true));
-        */
+        sessionManager = new SessionManager(this);
     }
 
     /**
@@ -98,7 +91,7 @@ public class SessionHistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Obtenemos los datos iniciales.
-        List<Session> history = sessionManager.getHistory();
+        List<Session> history = sessionManager.getAllSessions();
 
         // Inicializamos el adaptador.
         adapter = new SessionHistoryAdapter(history, getResources());
@@ -111,7 +104,7 @@ public class SessionHistoryActivity extends AppCompatActivity {
     private void updateHistoryDisplay() {
         // TODO: Recuperar datos reales para el listado de sesiones.
 
-        List<Session> sessions = sessionManager.getHistory();
+        List<Session> sessions = sessionManager.getAllSessions();
         boolean isEmpty = (sessions == null || sessions.isEmpty());
 
         layoutEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);

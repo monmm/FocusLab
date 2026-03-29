@@ -7,6 +7,8 @@ public class Session {
     private int duration;     // Duracion de la sesion: 25, 5 o 15 min
     private boolean completed; // La sesion fue Completada o Interrumpida
 
+    public Session() {}
+
     // Constructor, Getters y Setters...
 
     public Session(String type, String date, String startTime, int duration, boolean completed) {
